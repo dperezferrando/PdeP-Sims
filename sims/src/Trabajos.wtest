@@ -1,0 +1,74 @@
+import Sims.*
+import Trabajos.*
+
+// Requerimiento 29
+
+object fixture {
+	var sim
+	
+	method instanciarSimYMandarALaburar (trabajo)
+	{
+		sim = new Sim("hombre", 20, 100, superficial, "mujer")
+		sim.setTrabajo(trabajo)
+		sim.trabajar()
+	}
+	
+
+	method dineroOriginal()
+	{
+		return 100
+	}
+	
+	method felicidadOriginal()
+	{
+		return 1000
+	}
+	
+	method dineroSim()
+	{
+		return sim.dinero()
+	}
+	
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+	method sueldoTrabajo()
+	{
+		return sim.trabajo().sueldo(sim)
+	}
+	
+	method felicidadTrabajo()
+	{
+		return sim.trabajo().felicidadAfectada()
+	}	
+}
+
+
+test "Un Sim con trabajo copado gana plata y felicidad acorde a su trabajo"
+{
+
+	fixture.instanciarSimYMandarALaburar(mecanico)
+	assert.equals(fixture.dineroSim(),  fixture.dineroOriginal() + fixture.sueldoTrabajo())
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() + fixture.felicidadTrabajo())
+} 
+
+test "Un Sim con trabajo aburrido gana plata y pierde felicidad acorde a su trabajo"
+{
+	fixture.instanciarSimYMandarALaburar(barrendero)
+	assert.equals(fixture.dineroSim(),  fixture.dineroOriginal() + fixture.sueldoTrabajo())
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - fixture.felicidadTrabajo())
+}
+
+test "Un Sim con trabajo mercenario gana 100 + 2% de su dinero y su felicidad queda igual"
+{
+	fixture.instanciarSimYMandarALaburar(ingeniero)
+	assert.equals(fixture.dineroSim(),  fixture.dineroOriginal() + 100 + (0.02*fixture.dineroOriginal()))
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal())
+}
+
+test "Sim desocupado tira excepcion al trabajar"
+{
+	assert.throwsException({=> fixture.instanciarSimYMandarALaburar("ninguno")})
+}

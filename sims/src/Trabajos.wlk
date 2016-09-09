@@ -1,37 +1,68 @@
-class Trabajo {
+class Trabajo { // Abstracta
 	
-	var salario 
-	var felicidad
-	var tipo
+	var felicidadAfectada
+	var sueldo
 	
-	constructor (unSalario, unaCantidad, unTipo) {
-		salario = unSalario
-		felicidad = unaCantidad
-		tipo = unTipo
+	/*constructor(unSueldo, unaFelicidad)
+	{
+		sueldo = unSueldo
+		felicidadAfectada = unaFelicidad
+	}*/
+	
+	method sueldo(unSim)
+	{
+		return sueldo
 	}
 	
-	method getSalario() {
-		return salario
-	}
-	
-	method getFelicidad() {
-		return felicidad
-	}
-	
-	method getTipo() {
-		return tipo
+	method felicidadAfectada()
+	{
+		return felicidadAfectada
 	}
 	
 }
 
+class TrabajoCopado inherits Trabajo {
+	
+	constructor(unSueldo, unaFelicidad) // Porque la herencia esta rota
+	{
+		sueldo = unSueldo
+		felicidadAfectada = unaFelicidad
+	}
+	
+	method influirFelicidad(unSim)
+	{
+		unSim.modificarNivelDeFelicidad(felicidadAfectada)	
+	}
+}
+
+class TrabajoAburrido inherits Trabajo {
+	
+	constructor(unSueldo, unaFelicidad) // Porque la herencia esta rota
+	{
+		sueldo = unSueldo
+		felicidadAfectada = unaFelicidad
+	}
+	
+	method influirFelicidad(unSim)
+	{
+		unSim.modificarNivelDeFelicidad(-felicidadAfectada)	
+	}
+}
+
+class TrabajoMercenario { // Hereda?
+	
+	method sueldo(unSim)
+	{
+		return 100 + (0.02*unSim.dinero())
+	}
+	
+	method influirFelicidad(unSim)
+	{
+		
+	}
+}
+
 //TRABAJOS DE PRUEBA
-object mecanico inherits Trabajo(10, 100, copado) {}
-object ingeniero inherits Trabajo(0, 0, mercenario) {}
-object barrendero inherits Trabajo(20, -30, aburrido) {}
-object ninguno inherits Trabajo(0, 0, aburrido) {}
-
-
-//TIPOS DE TRABAJO
-object copado {}
-object mercenario {} 
-object aburrido {}
+object mecanico inherits TrabajoCopado(10, 100) {}
+object ingeniero inherits TrabajoMercenario {}
+object barrendero inherits TrabajoAburrido(20, 30) {}

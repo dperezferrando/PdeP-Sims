@@ -11,7 +11,7 @@ class Sim
 	var amigos = []
 	var sexoDePreferencia
 	var pareja = soltero
-	var trabajo = ninguno
+	var trabajo = "ninguno"
 	var conocimientos = #{}
 
 
@@ -26,30 +26,30 @@ class Sim
 
 //GETTERS Y SETTERS
 
-	method getEdad() {
+	method edad() {
 		return edad
 	}
 
-	method getSexo() {
+	method sexo() {
 		return sexo
 	}
 
-	method getPersonalidad() {
+	method personalidad() {
 		return personalidad
 	}
 
-	method getSexoDePreferencia() {
+	method sexoDePreferencia() {
 		return sexoDePreferencia
 	}
 
-	method getConocimientos() {
+	method conocimientos() {
 		if(self.estaSoniador()) {
 			return #{}
 		}
 		return conocimientos	
 	}
 
-	method getAmigos() {
+	method amigos() {
 		return amigos
 	}
 
@@ -57,7 +57,7 @@ class Sim
 		amigos = simsAmigos
 	}
 
-	method getDinero() {
+	method dinero() {
 		return dinero
 	}
 
@@ -65,7 +65,7 @@ class Sim
 		dinero = unaCantidad
 	}
 
-	method getTrabajo() {
+	method trabajo() {
 		return trabajo
 	}
 
@@ -73,7 +73,7 @@ class Sim
 		trabajo = unTrabajo
 	}
 
-	method getNivelDeFelicidad() {
+	method nivelDeFelicidad() {
 		if(self.estaSoniador()) {
 			return nivelDeFelicidad + 1000
 		}
@@ -89,7 +89,7 @@ class Sim
 		nivelDeFelicidad = unaCantidad
 	}
 
-	method getEstadoDeAnimo() {
+	method estadoDeAnimo() {
 		return estadoDeAnimo
 	}
 
@@ -97,7 +97,7 @@ class Sim
 		estadoDeAnimo = unEstadoDeAnimo
 	}
 
-	method getPareja() {
+	method pareja() {
 		return pareja
 	}	
 
@@ -115,12 +115,11 @@ class Sim
 	}
 
 	method abrazarProlongadamente(unSim) {
-		if(unSim.leAtrae(self)) {
+		if(unSim.leAtrae(self)) 
 			unSim.ponerse(soniador)
-		}
-		else {
-		unSim.ponerse(incomodo)
-		}
+		else 
+			unSim.ponerse(incomodo)
+		
 	}
 
 
@@ -128,7 +127,7 @@ class Sim
 //AMISTAD
 
 	method hacerseAmigoDe(unSim) {
-		self.getAmigos().add(unSim)
+		self.amigos().add(unSim)
 		self.modificarNivelDeFelicidad(self.valorarA(unSim))
 	}
 
@@ -138,19 +137,19 @@ class Sim
 	}
 
 	method esAmigoDe(unSim) {
-		return self.getAmigos().contains(unSim)
+		return self.amigos().contains(unSim)
 	}
 
 	method amigosMasRecientes() {
-		return self.getAmigos().reverse().take(4)
+		return self.amigos().reverse().take(4)
 	}
 
 	method amigosMasAntiguos() {
-		return self.getAmigos().take(4)
+		return self.amigos().take(4)
 	}
 
 	method nivelDePopularidad() {
-		return self.getAmigos().sum{simAmigo => simAmigo.getNivelDeFelicidad()}
+		return self.amigos().sum{simAmigo => simAmigo.nivelDeFelicidad()}
 	}
 
 	method esMasPopularQue(unSim) {
@@ -158,11 +157,11 @@ class Sim
 	}
 
 	method esElMasPopularDeSusAmigos() {
-		return self.getAmigos().all({unSim => self.esMasPopularQue(unSim)})
+		return self.amigos().all({unSim => self.esMasPopularQue(unSim)})
 	}
 	
 	method tieneAmigos() {
-		return not self.getAmigos().isEmpty()
+		return not self.amigos().isEmpty()
 	}
 
 
@@ -170,38 +169,38 @@ class Sim
 //EDAD
 
 	method esJoven() {
-		return self.getEdad().between(18, 29)
+		return self.edad().between(18, 29)
 	}
 
 //FELICIDAD
 
 	method modificarNivelDeFelicidad(unValor) {
-		self.setNivelDeFelicidad(self.getNivelDeFelicidad() + unValor)
+		self.setNivelDeFelicidad(self.nivelDeFelicidad() + unValor)
 	}
 
 	method estaTriste() {
-		return self.getNivelDeFelicidad() < 200 
+		return self.nivelDeFelicidad() < 200 
 	}
 
 //VALORACION
 
 	method valorarA(unSim) {
-		return self.getPersonalidad().valoracion(self, unSim)
+		return self.personalidad().valoracion(self, unSim)
 	}
 
 	method valoraMasA() {
-		return self.getAmigos().max({unSim => self.valorarA(unSim)})
+		return self.amigos().max({unSim => self.valorarA(unSim)})
 	}
 
 //ATRACCION
 
 	method lePodriaInteresar(unSim) {
-		return unSim.getSexo() == self.getSexoDePreferencia() 
+		return unSim.sexo() == self.sexoDePreferencia()
 
 	}
 
 	method leAtrae(unSim) {
-		return self.lePodriaInteresar(unSim) && self.getPersonalidad().atraccion(self, unSim)
+		return self.lePodriaInteresar(unSim) && self.personalidad().atraccion(self, unSim)
 	}
 
 	method leAtraen(muchosSims) {
@@ -211,19 +210,19 @@ class Sim
 //DINERO
 
 	method dineroTotalAmigos() {
-		return self.getAmigos().sum({unSim => unSim.getDinero()})
+		return self.amigos().sum({unSim => unSim.dinero()})
 	}
 
 	method tieneMasDineroQue(unSim) {
-		return self.getDinero() > unSim.getDinero()
+		return self.dinero() > unSim.dinero()
 	}
 
 	method duplicarDinero() {
-		return self.getDinero() * 2
+		return self.dinero() * 2
 	}
 	
 	method recibirPago(unaCantidad) {
-		self.setDinero(self.getDinero() + unaCantidad)
+		self.setDinero(self.dinero() + unaCantidad)
 	}
 
 //TRABAJO
@@ -233,71 +232,68 @@ class Sim
 	}
 	
 	method tieneTrabajo() {
-		return self.getTrabajo() != ninguno
+		return self.trabajo() != "ninguno"
 	}
 	
-	method tieneTrabajoMercenario() {
-		return self.getTrabajo().getTipo() == mercenario
-	}
-
 	method trabajar() {
-
+		
+		if(!self.tieneTrabajo())
+        	error.throwWithMessage("Tu Sim no tiene trabajo")
+        	
+		self.recibirPago(self.trabajo().sueldo(self))
+		self.trabajo().influirFelicidad(self)
+		
 		if(self.esBuenazo() && self.trabajaConTodosSusAmigos() && self.tieneAmigos() && self.tieneTrabajo()) {
-			self.modificarNivelDeFelicidad(self.getNivelDeFelicidad() * 0.1)
-		}
-		if(self.tieneTrabajoMercenario()) {
-			self.recibirPago(100 + 0.02 * self.getDinero())
-		}
-		else {
-			self.recibirPago(self.getTrabajo().getSalario())
-			self.modificarNivelDeFelicidad(self.getTrabajo().getFelicidad())
+			self.modificarNivelDeFelicidad(self.nivelDeFelicidad() * 0.1)
 		}
 	}
 	
 	method trabajaCon(unSim) {
-		return self.getTrabajo() == unSim.getTrabajo()
+		return self.trabajo() == unSim.trabajo()
+		
 	}
 	
 	method trabajaConTodosSusAmigos() {
-		return self.getAmigos().all({unSim => self.trabajaCon(unSim)})	
+		return self.amigos().all({unSim => self.trabajaCon(unSim)})	
 	}
 		
 //PERSONALIDAD
 	method esBuenazo() {
-		return self.getPersonalidad() == buenazo 
+		return self.personalidad() == buenazo 
 	}		
 	
 	
 //CONOCIMIENTOS
 
 	method adquirirConocimiento(unConocimiento) {
-		self.getConocimientos().add(unConocimiento)
+		self.conocimientos().add(unConocimiento)
 	}
 
 	method cuantoConoce() {
-		return self.getConocimientos().sum({unConocimiento => unConocimiento.length()})
+		return self.conocimientos().sum({unConocimiento => unConocimiento.length()})
 	}
 
 	method conoce(unConocimiento) {
-		return self.getConocimientos().contains(unConocimiento)
+		return self.conocimientos().contains(unConocimiento)
 	}
 
 	method contraerAmnesia() {
-		self.getConocimientos().clear()
+		self.conocimientos().clear()
 	}
 
 //ESTADOS DE ANIMO
 
 	method estaSoniador() {
-		return self.getEstadoDeAnimo() == soniador
+		return self.estadoDeAnimo() == soniador
 	}
 
 	method estaIncomodo() {
-		return self.getEstadoDeAnimo() == incomodo
+		return self.estadoDeAnimo() == incomodo
 	}
 
 	method ponerse(unEstadoDeAnimo) {
 		self.setEstadoDeAnimo(unEstadoDeAnimo)
+
 	}
 
 // CELOS
@@ -306,7 +302,7 @@ class Sim
 		self.modificarNivelDeFelicidad(-10)
 		motivo.romperAmistades(self)
 	}
-
+	
 }
 
 //PERSONALIDADES
@@ -318,7 +314,7 @@ object interesado {
 	}
 
 	method atraccion(unSim, otroSim) {
-		return otroSim.getDinero() >= unSim.duplicarDinero()
+		return otroSim.dinero() >= unSim.duplicarDinero()
 	}
 }
 
@@ -329,14 +325,14 @@ object superficial {
 	}
 
 	method atraccion(unSim, otroSim) {
-		return otroSim.esJoven() && unSim.getAmigos().all({sim => otroSim.esMasPopularQue(sim)})
+		return otroSim.esJoven() && unSim.amigos().all({sim => otroSim.esMasPopularQue(sim)})
 	}
 }
 
 object buenazo {
 
 	method valoracion(unSim, otroSim) {
-		return 0.5 * unSim.getNivelDeFelicidad()
+		return 0.5 * unSim.nivelDeFelicidad()
 	}
 
 	method atraccion(unSim, otroSim) {
@@ -357,24 +353,25 @@ object peleadoConLaVida {
 }
 
 
-// MOTIVOS DE CELOS
+// MOTIVOS DE CELOS - REVISAR REPETICION DE LOGICA
 
 object dinero {
 	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.getAmigos().filter({unSim => simCeloso.tieneMasDineroQue(unSim)}))
+		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.tieneMasDineroQue(unSim)}))
+		
 	}
 }
 
 object popularidad {
 	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.getAmigos().filter({unSim => simCeloso.esMasPopularQue(unSim)}))
+		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.esMasPopularQue(unSim)}))
 	}
 }
 
 
 object pareja {
 	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.getAmigos().filter({unSim => not simCeloso.getPareja().esAmigoDe(unSim)}))
+		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => not simCeloso.pareja().esAmigoDe(unSim)}))
 	}
 }
 
@@ -386,19 +383,14 @@ object soniador {}
 object incomodo {}
 
 
-// TIPOS DE SEXO
-
-object hombre {}
-object mujer {}
-
 //SIN RELACION
 object soltero {}
 
 //SIMS DE PRUEBA
 
-object juan inherits Sim(hombre, 20, 100, superficial, mujer) {}
-object pepita inherits Sim(mujer, 21, 50000, superficial, hombre) {}
-object pepe inherits Sim(hombre, 45, 4000, buenazo, mujer) {}
-object martin inherits Sim(hombre, 20, 1000, interesado, mujer) {}
-object pablo inherits Sim(hombre, 40, 1000, peleadoConLaVida, hombre) {}
+object juan inherits Sim("hombre", 20, 100, superficial, "mujer") {}
+object pepita inherits Sim("mujer", 21, 50000, superficial, "hombre") {}
+object pepe inherits Sim("hombre", 45, 4000, buenazo, "mujer") {}
+object martin inherits Sim("hombre", 20, 1000, interesado, "mujer") {}
+object pablo inherits Sim("hombre", 40, 1000, peleadoConLaVida, "hombre") {}
 
