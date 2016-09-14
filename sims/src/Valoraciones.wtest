@@ -1,0 +1,85 @@
+import Sims.*
+import Trabajos.*
+
+object fixture {
+	var sim
+	
+	method instanciarSimConPersonalidad(unaPersonalidad)
+	{
+		sim = new Sim("hombre", 20, 2000, unaPersonalidad, "mujer")
+		sim.hacerseAmigoDe(juan)
+		sim.hacerseAmigoDe(pepita)
+		juan.hacerseAmigoDe(pepita)
+		juan.hacerseAmigoDe(martin)
+		pepita.hacerseAmigoDe(juan)
+	}
+	
+	method valorar(unSim) 
+	{
+		return sim.valorarA(unSim)
+	}
+	
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+	method amigoMasValorado() 
+	{
+		return sim.valoraMasA()
+	}
+	
+}
+
+
+// Requerimiento 2
+
+test "Un sim con personalidad interesada le da un valor a pepita igual al 10% del dinero de todos los amigos de pepita"
+{
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals(pepita.dineroTotalAmigos() * 0.1 , fixture.valorar(pepita))
+}
+
+test "Un sim con personalidad superficial le da un valor a pepita igual a su nivel de popularidad multiplicado 20 veces"
+{
+	fixture.instanciarSimConPersonalidad(superficial)
+	assert.equals(pepita.nivelDePopularidad() * 20, fixture.valorar(pepita))
+}
+
+test "Un sim con personalidad buenaza la da un valor a pepita igual al 50% de su nivel de felicidad"
+{
+	fixture.instanciarSimConPersonalidad(buenazo)
+	assert.equals(fixture.felicidadSim() * 0.5, fixture.valorar(pepita))
+}
+
+test "Un sim con personalidad peleadoConLaVida le da un valor a pepita igual a cero"
+{
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.equals(0, fixture.valorar(pepita))
+}
+
+// Requerimiento 3
+
+test "Un sim con personalidad interesada valora mas a pepita ya que sus amigos tienen mas dinero "
+{
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals(pepita, fixture.amigoMasValorado())
+}
+
+test "Un sim con personalidad superficial valora mas a juan ya que es mas popular"
+{
+	fixture.instanciarSimConPersonalidad(superficial)
+	assert.equals(juan, fixture.amigoMasValorado())
+}
+
+test "Un sim con personalidad buenaza valora mas a juan ya que es el primero de sus amigos (valora a todos por igual)"
+{
+	fixture.instanciarSimConPersonalidad(buenazo)
+	assert.equals(juan, fixture.amigoMasValorado())
+}
+
+test "Un sim con personalidad peleadoConLaVida valora mas a juan ya que es el primero de sus amigos (valora a todos por igual)"
+{
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.equals(juan, fixture.amigoMasValorado())
+}

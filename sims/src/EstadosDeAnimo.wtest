@@ -1,0 +1,87 @@
+import Sims.*
+import Trabajos.*
+
+
+object fixture {
+	var sim
+	
+	method instanciarSimConEstadoDeAnimo(unEstadoDeAnimo)
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.setEstadoDeAnimo(unEstadoDeAnimo)
+		sim.adquirirConocimiento("Hay que hacer el TP de PDP")
+		sim.adquirirConocimiento("Mañana tengo parcial y no estudie")
+	}
+	
+	method estadoDeAnimoSim() 
+	{
+		return sim.estadoDeAnimo()
+	}
+	
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+	method felicidadOriginal()
+	{
+		return 1000
+	}
+	
+	method conocimientosSim() 
+	{
+		return sim.conocimientos()
+	}
+}
+
+// Requerimiento 26
+
+test "Un sim se puso soniador"
+{
+	fixture.instanciarSimConEstadoDeAnimo(soniador)
+	assert.equals(soniador, fixture.estadoDeAnimoSim())
+}
+
+test "Un sim se puso soniador y su felicidad aumento 1000 unidades"
+{
+	fixture.instanciarSimConEstadoDeAnimo(soniador)
+	assert.equals(fixture.felicidadOriginal() + 1000, fixture.felicidadSim())
+}
+
+test "Un sim se puso soniador y no se acuerda de nada"
+{
+	fixture.instanciarSimConEstadoDeAnimo(soniador)
+	assert.equals(#{}, fixture.conocimientosSim())
+}
+
+test "Un sim se puso incomodo"
+{
+	fixture.instanciarSimConEstadoDeAnimo(incomodo)
+	assert.equals(incomodo, fixture.estadoDeAnimoSim())
+}
+
+test "Un sim se puso incomodo y su felicidad disminuyo 200 unidadaes"
+{
+	fixture.instanciarSimConEstadoDeAnimo(incomodo)
+	assert.equals(fixture.felicidadOriginal() - 200, fixture.felicidadSim())
+}
+
+//Requerimiento 27
+
+test "Un sim se puso normal"
+{
+	fixture.instanciarSimConEstadoDeAnimo(normal)
+	assert.equals(normal, fixture.estadoDeAnimoSim())
+}
+
+test "Un sim se puso normal y se acuerda de todo"
+{
+	fixture.instanciarSimConEstadoDeAnimo(normal)
+	assert.equals(#{"Hay que hacer el TP de PDP", "Mañana tengo parcial y no estudie"}, fixture.conocimientosSim())
+}
+
+test "Un sim se puso normal y su felicidad volvio a la normalidad"
+{
+	fixture.instanciarSimConEstadoDeAnimo(normal)
+	assert.equals(fixture.felicidadOriginal(), fixture.felicidadSim())
+}

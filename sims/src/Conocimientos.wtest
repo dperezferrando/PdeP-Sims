@@ -1,0 +1,66 @@
+import Sims.*
+import Trabajos.*
+
+
+object fixture {
+	var sim
+	
+	method instanciarSim()
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.adquirirConocimiento("Mañana tengo parcial y no estudie")
+	}
+	
+	method conocimientosSim() 
+	{
+		return sim.conocimientos()
+	}
+	
+	method cuantoConoceElSim() 
+	{
+		return sim.cuantoConoce()
+	}
+	
+	method conoceElSim(unConocimiento) 
+	{
+		return sim.conoce(unConocimiento)
+	}
+	
+	method amnesiaSim() 
+	{
+		sim.contraerAmnesia()
+	}
+}
+
+// Requerimiento 22
+
+test "Un sim se entera que mañana tiene parcial y no estudio nada"
+{
+	fixture.instanciarSim()
+	assert.equals(#{"Mañana tengo parcial y no estudie"}, fixture.conocimientosSim())
+}
+
+// Requerimiento 23
+
+test "Un sim conoce tanto como la cantidad de caracteres total de todos sus conocimientos"
+{
+	fixture.instanciarSim()
+	assert.equals("Mañana tengo parcial y no estudie".length(), fixture.cuantoConoceElSim())
+}
+
+// Requerimiento 24
+
+test "Un sim sabe que mañana tiene parcial y no estudio nada"
+{
+	fixture.instanciarSim()
+	assert.equals(true, fixture.conoceElSim("Mañana tengo parcial y no estudie"))
+}
+
+// Requerimiento 25
+
+test "Un sim contrajo amnesia y se olvido de todo para siempre"
+{
+	fixture.instanciarSim()
+	fixture.amnesiaSim()
+	assert.equals(#{}, fixture.conocimientosSim())
+}

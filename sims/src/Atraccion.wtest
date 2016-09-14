@@ -1,0 +1,96 @@
+import Sims.*
+import Trabajos.*
+
+
+object fixture {
+	var sim
+	
+	method instanciarSimConPersonalidad(unaPersonalidad)
+	{
+		sim = new Sim("hombre", 20, 2000, unaPersonalidad, "mujer")
+		sim.hacerseAmigoDe(juan)
+		pepita.hacerseAmigoDe(juan)
+		pepita.hacerseAmigoDe(pablo)
+		pepita.hacerseAmigoDe(martin)
+		anastasia.setNivelDeFelicidad(100)
+	}
+	
+	method sexoDePreferenciaSim() 
+	{
+		return sim.sexoDePreferencia()
+	}
+	
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+	method leAtraeAlSim(unSim) 
+	{
+		return sim.leAtrae(unSim)
+	}
+	
+	method leAtraenAlSim(unosSims) 
+	{
+		return sim.leAtraen(unosSims)
+	}
+	
+}
+
+// Requerimiento 20
+
+test "Un sim se siente atraido por el sexo de su preferencia"
+{
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals("mujer", fixture.sexoDePreferenciaSim())
+}
+
+test "Un sim con personalidad interesada se siente atraido por anastasia ya que duplica su fortuna"
+{
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals(true, fixture.leAtraeAlSim(anastasia))
+}
+
+test "Un sim con personalidad superficial se siente atraido por pepita ya que es mas popular que todos sus amigos"
+{
+	fixture.instanciarSimConPersonalidad(superficial)
+	assert.equals(true, fixture.leAtraeAlSim(pepita))
+}
+
+test "Un sim con personalidad buenaza se siente atraido por pepita ya que es mujer"
+{
+	fixture.instanciarSimConPersonalidad(buenazo)
+	assert.equals(true, fixture.leAtraeAlSim(pepita))
+}
+
+test "Un sim con personalidad peleadoConLaVida se siente atraido por anastasia ya que ella esta triste"
+{
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.equals(anastasia.estaTriste(), fixture.leAtraeAlSim(anastasia))
+}
+
+// Requerimiento 21
+
+test "Un sim con personalidad interesada se siente atraido solo por anastasia ya que duplica su fortuna"
+{
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals([anastasia], fixture.leAtraenAlSim([pepita, anastasia]))
+}
+
+test "Un sim con personalidad superficial se siente atraido solo por pepita ya que tiene mas popularidad que sus amigos"
+{
+	fixture.instanciarSimConPersonalidad(superficial)
+	assert.equals([pepita], fixture.leAtraenAlSim([pepita, anastasia]))
+}
+
+test "Un sim con personalidad buenaza se siente atraido por pepita y anastasia ya que ambas son mujeres"
+{
+	fixture.instanciarSimConPersonalidad(buenazo)
+	assert.equals([pepita, anastasia], fixture.leAtraenAlSim([pepita, anastasia]))
+}
+
+test "Un sim con personalidad peleadoConLaVida se siente atraido solo por anastasia ya que es la unica que esta triste"
+{
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.equals([anastasia], fixture.leAtraenAlSim([pepita, anastasia]))
+}

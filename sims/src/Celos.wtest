@@ -1,0 +1,66 @@
+import Sims.*
+import Trabajos.*
+
+// Requerimiento 28
+
+object fixture {
+	var sim
+	
+	method instanciarSimYPonerloCelosoPor(motivo)
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.hacerseAmigoDe(pablo)
+		sim.hacerseAmigoDe(martin)
+		sim.hacerseAmigoDe(pepita)
+		pepita.hacerseAmigoDe(pablo)
+		pepita.hacerseAmigoDe(martin)
+		pepita.hacerseAmigoDe(juan)
+		pepita.hacerseAmigoDe(pepe)
+		sim.setPareja(pepita)
+		sim.ponerseCelosoPor(motivo)
+	}
+	
+	method felicidadOriginal()
+	{
+		return 1000
+	}
+	
+	method amigosSims() 
+	{
+		return sim.amigos()	
+	}
+
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+}
+
+
+test "Un Sim se pone celoso por dinero dejando de ser amigo de pepita y martin ya que tienen mas dinero que el y disminuye su felicidad en 10"
+{
+
+	fixture.instanciarSimYPonerloCelosoPor(dinero)
+	assert.equals([pablo],  fixture.amigosSims())
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
+}
+
+test "Un Sim se pone celoso por popularidad dejando de ser amigo de pepita ya que es mas popular y disminuye su felicidad en 10"
+{
+
+	fixture.instanciarSimYPonerloCelosoPor(popularidad)
+	assert.equals([pablo, martin],  fixture.amigosSims())
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
+} 
+
+test "Un Sim se pone celoso de su pareja dejando de ser amigo de pablo y martin ya que son amigos de pepita y disminuye su felicidad en 10"
+{
+
+	fixture.instanciarSimYPonerloCelosoPor(pareja)
+	assert.equals([pepita],  fixture.amigosSims())
+	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
+} 
+
+
+

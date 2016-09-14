@@ -1,0 +1,50 @@
+import Sims.*
+import Trabajos.*
+
+object fixture {
+	var sim
+	
+	method instanciarSim()
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.abrazarNormalmente(pepita)
+		sim.abrazarProlongadamente(martin)
+		sim.abrazarProlongadamente(pablo)
+	}
+	
+	method felicidadOriginal()
+	{
+		return 1000
+	}
+	
+	method felicidadSim()
+	{
+		return sim.nivelDeFelicidad()
+	}
+	
+}
+
+// Requerimiento 1
+
+test "Un sim abraza normalmente a pepita y la felicidad del sim aumenta en 2 y de pepita en 4"
+{
+	fixture.instanciarSim()
+	assert.equals(fixture.felicidadOriginal() + 2, fixture.felicidadSim())
+	assert.equals(1004, pepita.nivelDeFelicidad())
+}
+
+test "Un sim abraza prolongadamente a martin y lo pone incomodo ya que no le atrae el sim"
+{
+	fixture.instanciarSim()
+	assert.equals(incomodo, martin.estadoDeAnimo())
+}
+
+test "Un sim abraza prolongadamente a pablo y lo pone soñador ya que le atrae el sim"
+{
+	fixture.instanciarSim()
+	assert.equals(soniador, pablo.estadoDeAnimo())
+}
+
+
+
+

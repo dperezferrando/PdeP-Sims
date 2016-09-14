@@ -356,6 +356,7 @@ object peleadoConLaVida {
 // MOTIVOS DE CELOS - REVISAR REPETICION DE LOGICA
 
 object dinero {
+	
 	method romperAmistades(simCeloso) {
 		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.tieneMasDineroQue(unSim)}))
 		
@@ -388,9 +389,9 @@ object soltero {}
 
 //SIMS DE PRUEBA
 
-object juan inherits Sim("hombre", 20, 100, superficial, "mujer") {}
-object pepita inherits Sim("mujer", 21, 50000, superficial, "hombre") {}
-object pepe inherits Sim("hombre", 45, 4000, buenazo, "mujer") {}
-object martin inherits Sim("hombre", 20, 1000, interesado, "mujer") {}
-object pablo inherits Sim("hombre", 40, 1000, peleadoConLaVida, "hombre") {}
-
+object juan inherits Sim("hombre", 20, 50000, superficial, "mujer") {}
+object pepita inherits Sim("mujer", 21, 1800, superficial, "hombre") {}
+object pepe inherits Sim("hombre", 45, 4000, peleadoConLaVida, "mujer") {}
+object martin inherits Sim("hombre", 20, 3000, interesado, "mujer") {}
+object pablo inherits Sim("hombre", 40, 1000, buenazo, "hombre") {}
+object anastasia inherits Sim("mujer", 21, 99999, superficial, "hombre") {}

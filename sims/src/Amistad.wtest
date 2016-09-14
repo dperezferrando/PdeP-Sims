@@ -1,0 +1,109 @@
+import Sims.*
+import Trabajos.*
+
+
+object fixture {
+	var sim
+	
+	method instanciarSim()
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.hacerseAmigoDe(juan)
+		sim.hacerseAmigosCon(pepe)
+		sim.hacerseAmigoDe(pablo)
+		sim.hacerseAmigoDe(martin)
+		sim.hacerseAmigoDe(pepita)
+	}
+	
+	method sim() 
+	{
+		return sim
+	}
+	
+	method amigosSim() 
+	{
+		return sim.amigos()
+	}
+	
+	method esAmigoDelSim(unSim) 
+	{
+		return sim.esAmigoDe(unSim)
+	}
+	
+	method amigosMasNuevosSim() 
+	{
+		return sim.amigosMasRecientes()
+	}
+	
+	method amigosMasViejosSim() 
+	{
+		return sim.amigosMasAntiguos()
+	}
+	
+	method nivelDePopularidadSim()
+	{
+		return sim.nivelDePopularidad()
+	}
+	
+	method esElMasPopular() 
+	{
+		return sim.esElMasPopularDeSusAmigos() 
+	} 
+}
+
+// Requerimiento 4
+
+test "Un sim se hace amigo de juan por lo tanto juan forma parte de su grupo de amigos"
+{
+	fixture.instanciarSim()
+	assert.equals([juan, pepe, pablo, martin, pepita], fixture.amigosSim())
+}
+
+// Requerimiento 5
+
+test "Un sim se hace amigo con pepe por lo tanto pepe forma parte de su grupo de amigos y el sim forma parte del grupo de pepe"
+{
+	fixture.instanciarSim()
+	assert.equals([juan, pepe, pablo, martin, pepita], fixture.amigosSim())
+	assert.equals([fixture.sim()], pepe.amigos())
+}
+
+// Requerimiento 6
+
+test "Un sim es amigo de juan ya que forma parte de su grupo de amigos"
+{
+	fixture.instanciarSim()
+	assert.equals(true, fixture.esAmigoDelSim(juan))
+}
+
+// Requerimiento 7
+
+test "Un sim tiene como amigos mas recientes a pepita, martin, pablo y pepe ya que son los ultimos de su grupo de amigos"
+{
+	fixture.instanciarSim()
+	assert.equals([pepita, martin, pablo, pepe], fixture.amigosMasNuevosSim())
+}
+
+// Requerimiento 8
+
+test "Un sim tiene como amigos mas viejos a juan, pepe, pablo, martin ya que son los primeros de su grupo de amigos"
+{
+	fixture.instanciarSim()
+	assert.equals([juan, pepe, pablo, martin], fixture.amigosMasViejosSim())
+}
+
+// Requerimiento 9
+
+test "Un sim tiene un nivel de popularidad igual a la suma de los niveles de felicidad de sus amigos"
+{
+	fixture.instanciarSim()
+	assert.equals(5000, fixture.nivelDePopularidadSim())
+}
+
+// Requerimiento 10
+
+test "Un sim es el mas popular de todo el grupo de amigos (juan, pepe, pablo, martin y pepita)"
+{
+	fixture.instanciarSim()
+	assert.equals(true, fixture.esElMasPopular())
+}
