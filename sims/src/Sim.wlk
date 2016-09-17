@@ -1,4 +1,5 @@
-import Trabajos.*
+import Trabajo.*
+import Relacion.*
 
 class Sim
 {
@@ -10,7 +11,7 @@ class Sim
 	var estadoDeAnimo = normal
 	var amigos = []
 	var sexoDePreferencia
-	var pareja = soltero
+	var relacion = "soltero"
 	var trabajo = "ninguno"
 	var conocimientos = #{}
 
@@ -97,12 +98,12 @@ class Sim
 		estadoDeAnimo = unEstadoDeAnimo
 	}
 
-	method pareja() {
-		return pareja
+	method relacion() {
+		return relacion
 	}	
 
-	method setPareja(unSim) {
-		pareja = unSim
+	method setRelacion(unaRelacion) {
+		relacion = unaRelacion
 	}
 
 
@@ -153,7 +154,7 @@ class Sim
 	}
 
 	method esMasPopularQue(unSim) {
-		return self.nivelDePopularidad() > unSim.nivelDePopularidad()
+		return self.nivelDePopularidad() >= unSim.nivelDePopularidad()
 	}
 
 	method esElMasPopularDeSusAmigos() {
@@ -206,6 +207,43 @@ class Sim
 	method leAtraen(muchosSims) {
 		return muchosSims.filter({unSim => self.leAtrae(unSim)})
 	}
+	
+	method leAtraeUnAmigoDeLaRelacion()
+	{
+		return self.amigosRelacion().any({unSim => self.leAtrae(unSim)})
+	}
+	
+//RELACION
+
+	method empezarRelacion(unSim)
+	{
+		var nuevaRelacion = new Relacion(self, unSim)
+		self.setRelacion(nuevaRelacion) 
+		unSim.setRelacion(nuevaRelacion)
+	}
+	method amigosRelacion()
+	{
+		return self.relacion().amigosRelacion()
+	}
+	
+	method estaSoltero()
+	{
+		return self.relacion() == "soltero"
+	}
+	
+	method pareja()
+	{
+		if(self.estaSoltero())
+			error.throwWithMessage("No tiene pareja")
+		return self.relacion().pareja(self)
+	}
+	
+	method terminarRelacion()
+	{
+		
+		relacion.terminar()
+	}
+	
 	
 //DINERO
 
@@ -353,9 +391,10 @@ object peleadoConLaVida {
 }
 
 
-// MOTIVOS DE CELOS - REVISAR REPETICION DE LOGICA
+// MOTIVOS DE CELOS
 
 object dinero {
+	
 	method romperAmistades(simCeloso) {
 		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.tieneMasDineroQue(unSim)}))
 		
@@ -383,14 +422,14 @@ object soniador {}
 object incomodo {}
 
 
-//SIN RELACION
-object soltero {}
-
 //SIMS DE PRUEBA
 
-object juan inherits Sim("hombre", 20, 100, superficial, "mujer") {}
-object pepita inherits Sim("mujer", 21, 50000, superficial, "hombre") {}
-object pepe inherits Sim("hombre", 45, 4000, buenazo, "mujer") {}
-object martin inherits Sim("hombre", 20, 1000, interesado, "mujer") {}
-object pablo inherits Sim("hombre", 40, 1000, peleadoConLaVida, "hombre") {}
-
+object juan inherits Sim("hombre", 20, 50000, superficial, "mujer") {}
+object pepita inherits Sim("mujer", 21, 1800, superficial, "hombre") {}
+object pepe inherits Sim("hombre", 45, 4000, peleadoConLaVida, "mujer") {}
+object martin inherits Sim("hombre", 20, 3000, interesado, "mujer") {}
+object pablo inherits Sim("hombre", 40, 1000, buenazo, "hombre") {}
+object carla inherits Sim("mujer", 21, 1000, interesado, "hombre") {}
+object anastasia inherits Sim("mujer", 21, 99999, superficial, "hombre") {}
+object icardi inherits Sim("hombre",21,999,superficial, "mujer") {}
+object wanda inherits Sim("mujer", 40,999, peleadoConLaVida, "hombre" ) {}

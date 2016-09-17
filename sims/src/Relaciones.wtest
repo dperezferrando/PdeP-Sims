@@ -1,0 +1,131 @@
+import Sim.*
+import Relacion.*
+
+object fixture
+{
+	var sim
+	
+	method instanciarSimYEmpezarRelacionCon(otroSim)
+	{
+		sim = new Sim("hombre", 20, 3000, superficial, "mujer")
+		sim.hacerseAmigoDe(icardi)
+		sim.empezarRelacion(otroSim)
+	}
+	
+	method relacion()
+	{
+		return sim.relacion()
+	}
+	
+	method terminarRelacion()
+	{
+		sim.terminarRelacion()
+	}
+	
+	method simSoltero()
+	{
+		return sim.estaSoltero()
+	}
+	
+	method unionAmigos()
+	{
+		return sim.amigos().asSet().union(pepita.amigos())
+	}
+	
+	method sim()
+	{
+		return sim
+	}
+
+	method simHacerAmigoDe(alguien)
+	{
+		sim.hacerseAmigoDe(alguien)
+	}
+
+}
+
+// Requerimiento 11
+
+test "Dos sims inician una relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	assert.equals(fixture.relacion(), pepita.relacion())
+}
+
+// Requerimiento 12
+
+test "Sim forma parte de una relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	assert.that(fixture.relacion().pertenece(pepita))
+}
+
+// Requerimiento 13
+
+test "Terminar relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.terminarRelacion()
+	assert.that(fixture.simSoltero())
+	assert.that(pepita.estaSoltero())
+}
+
+// Requerimiento 14
+
+test "Saber si una relacion termino"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	var relacion = fixture.relacion()
+	fixture.terminarRelacion()
+	assert.that(relacion.termino())
+}
+
+// Requerimiento 15
+
+test "Conocer circulo de amigos de la relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	assert.equals(fixture.relacion().amigosRelacion(), fixture.unionAmigos())
+}
+
+// Requerimiento 16
+
+test "Conocer miembros de la relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	assert.equals([fixture.sim(), pepita], fixture.relacion().miembros())
+}
+
+// Requerimiento 17
+
+test "Saber si relacion funciona"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(carla)
+	assert.that(fixture.relacion().funciona())
+}
+
+// Requerimiento 18
+
+test "Saber si en relacion se pudrio todo"
+{
+	icardi.setNivelDeFelicidad(10)
+	fixture.instanciarSimYEmpezarRelacionCon(wanda)
+	wanda.hacerseAmigoDe(pepe)
+	assert.that(fixture.relacion().sePudrioTodo())
+}
+
+// Requerimiento 19
+
+test "Reestablecer relacion"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	var relacion = fixture.relacion()
+	fixture.terminarRelacion()
+	fixture.sim().empezarRelacion(anastasia)
+	pepita.empezarRelacion(icardi)
+	relacion.reestablecer()
+	assert.equals(fixture.relacion(), relacion)
+	assert.equals(pepita.pareja(), fixture.sim())
+	
+}
+

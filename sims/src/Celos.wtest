@@ -1,5 +1,6 @@
-import Sims.*
-import Trabajos.*
+import Sim.*
+import Trabajo.*
+import Relacion.*
 
 // Requerimiento 28
 
@@ -16,7 +17,7 @@ object fixture {
 		pepita.hacerseAmigoDe(martin)
 		pepita.hacerseAmigoDe(juan)
 		pepita.hacerseAmigoDe(pepe)
-		sim.setPareja(pepita)
+		sim.empezarRelacion(pepita)
 		sim.ponerseCelosoPor(motivo)
 	}
 	
@@ -42,7 +43,7 @@ test "Un Sim se pone celoso por dinero dejando de ser amigo de pepita y martin y
 {
 
 	fixture.instanciarSimYPonerloCelosoPor(dinero)
-	assert.equals([pablo],  fixture.amigosSims())
+	assert.equals([pablo,pepita],  fixture.amigosSims())
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
 }
 

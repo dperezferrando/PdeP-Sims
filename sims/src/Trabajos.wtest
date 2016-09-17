@@ -1,5 +1,5 @@
-import Sims.*
-import Trabajos.*
+import Sim.*
+import Trabajo.*
 
 // Requerimiento 29
 
