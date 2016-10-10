@@ -1,0 +1,57 @@
+import Sim.*
+import Trabajo.*
+import Personalidades.*
+import EstadoDeAnimo.*
+
+
+object fixture {
+	var sim
+	
+	method instanciarSim()
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.adquirirConocimiento("Soy un trolazo")
+		juan.adquirirConocimiento("No me banio hace una semana")
+	}
+	
+	method conocimientosSim() 
+	{
+		return sim.conocimientos()
+	}
+	
+	method esPrivadoSim(unConocimiento) {
+		return sim.esPrivado(unConocimiento)
+	}
+	
+	method difundirSim(unConocimiento) {
+		sim.difundir(unConocimiento)
+	}
+	
+	method todosLoSaben(unConocimiento) {
+		return sim.amigos().all({unSim => unSim.conoce(unConocimiento)})
+	}
+	
+	method desparramarChismeSim(unSim) {
+		sim.desparramarChismeSobre(unSim)
+	}
+}
+
+test "El sim solo sabe que es gay por lo tanto es un conocimiento privado"
+{
+	fixture.instanciarSim()
+	assert.equals(true, fixture.esPrivadoSim("Soy un trolazo"))
+}
+
+test "Un sim difunde que controlan las mentes con vacunas para la gripe"
+{
+	fixture.instanciarSim()
+	fixture.difundirSim("Controlan las mentes con vacunas para la gripe")
+	assert.equals(true, fixture.todosLoSaben("Controlan las mentes con vacunas para la gripe"))
+}
+
+test "Un sim desparrama un chisme sobre juan"
+{
+	fixture.instanciarSim()
+	fixture.desparramarChismeSim(juan)
+	assert.equals(true, fixture.todosLoSaben(juan.conocimientosPrivados().anyOne()))
+}

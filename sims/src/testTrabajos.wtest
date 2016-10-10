@@ -1,5 +1,7 @@
 import Sim.*
 import Trabajo.*
+import Personalidades.*
+import EstadoDeAnimo.*
 
 // Requerimiento 29
 
@@ -42,7 +44,8 @@ object fixture {
 	method felicidadTrabajo()
 	{
 		return sim.trabajo().felicidadAfectada()
-	}	
+	}
+	
 }
 
 
@@ -68,7 +71,10 @@ test "Un Sim con trabajo mercenario gana 100 + 2% de su dinero y su felicidad qu
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal())
 }
 
-test "Sim desocupado tira excepcion al trabajar"
+test "Un Sim desocupado no presenta cambio alguno en su dinero o felicidad cuando va a trabajar"
 {
-	assert.throwsException({=> fixture.instanciarSimYMandarALaburar("ninguno")})
+	fixture.instanciarSimYMandarALaburar(desempleado)
+	assert.equals(1000, fixture.felicidadSim())
+	assert.equals(100, fixture.dineroSim())
+	
 }

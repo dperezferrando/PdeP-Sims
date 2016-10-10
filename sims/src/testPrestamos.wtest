@@ -1,0 +1,69 @@
+import Sim.*
+import Trabajo.*
+import Personalidades.*
+import EstadoDeAnimo.*
+
+
+object fixture {
+	
+	var sim
+	
+method instanciarSimConPersonalidad(unaPersonalidad)
+	{
+		sim = new Sim("hombre", 20, 5000, unaPersonalidad, "mujer")
+		juan.hacerseAmigoDe(pepita)
+		juan.hacerseAmigoDe(martin)
+		juan.hacerseAmigoDe(pablo)
+	}
+	
+	method lePrestaHasta(unSim) {
+		return sim.lePrestaComoMuchoA(unSim)
+	}
+	
+	method prestarDinero(unSim, unaCantidad) {
+		sim.prestarDineroA(unSim, unaCantidad)
+	}
+	
+	method dineroSim() {
+		return sim.dinero()
+	}
+}
+
+
+test "Un sim buenazo le prestaria a juan hasta 500 pesos ya que valora a todos por igual" {
+	fixture.instanciarSimConPersonalidad(buenazo)
+	assert.equals(500, fixture.lePrestaHasta(juan))
+}
+
+test "Un sim superficial le prestaria a juan hasta 60000 pesos" {
+	fixture.instanciarSimConPersonalidad(superficial)
+	assert.equals(60000, fixture.lePrestaHasta(juan))
+}
+
+test "Un sim peleadoConLaVida no le prestaria nada de plata a juan" {
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.equals(0, fixture.lePrestaHasta(juan))
+}
+
+test "Un sim interasado le prestaria a juan hasta 50000 pesos ya que no presta mas de lo que el sim tenga" {
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.equals(juan.dinero(), fixture.lePrestaHasta(juan))
+}
+
+test "Un sim que tiene 5000 pesos le presta a juan 3000, por lo tanto le queda 2000 pesos y juan pasa a tener 53000" {
+	fixture.instanciarSimConPersonalidad(interesado)
+	fixture.prestarDinero(juan, 3000)
+	assert.equals(2000, fixture.dineroSim())
+	assert.equals(53000, juan.dinero())
+}
+
+test "Un sim que tiene 5000 pesos le presta a juan 6000, por lo tanto debe fallar ya que el prestamo es mayor a lo que el sim tiene" {
+	fixture.instanciarSimConPersonalidad(interesado)
+	assert.throwsException({=> fixture.prestarDinero(juan, 6000)})
+}
+
+test "Un sim peladoConLaVida le presta a juan 6000, por lo tanto debe fallar ya que este no esta dispuesto a prestarle nada" {
+	fixture.instanciarSimConPersonalidad(peleadoConLaVida)
+	assert.throwsException({=> fixture.prestarDinero(juan, 6000)})
+}
+

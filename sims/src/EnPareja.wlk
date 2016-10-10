@@ -1,4 +1,4 @@
-class Relacion
+class EnPareja
 {
 	var amigosRelacion = #{}
 	var unSim
@@ -28,7 +28,7 @@ class Relacion
 	
 	method hayOtrasAtracciones()
 	{
-		return unSim.leAtraeUnAmigoDeLaRelacion() || otroSim.leAtraeUnAmigoDeLaRelacion()
+		return self.miembros().any({algunSim => algunSim.leAtraeUnAmigoDeLaRelacion()})
 	}
 	
 	method pareja(parejaSim)
@@ -36,19 +36,18 @@ class Relacion
 		if(parejaSim == unSim)
 			return otroSim
 		else
-			return unSim
-			
+			return unSim		
 	}
 	
 	method terminar()
 	{
-		unSim.setRelacion("soltero")
-		otroSim.setRelacion("soltero")
+		unSim.setEstadoCivil(soltero)
+		otroSim.setEstadoCivil(soltero)
 	}
 	
 	method termino()
 	{
-		return unSim.relacion() != self || otroSim.relacion() != self
+		return self.miembros().any({algunSim => algunSim.estadoCivil() != self})
 	}
 	
 	method miembros()
@@ -58,13 +57,27 @@ class Relacion
 	
 	method reestablecer()
 	{
-		unSim.setRelacion(self)
-		otroSim.setRelacion(self)
-		
+		unSim.setEstadoCivil(self)
+		otroSim.setEstadoCivil(self)
 	}
 	
 	method pertenece(algunSim)
 	{
-		return algunSim.relacion() == self
+		return self.miembros().contains(algunSim)
 	}
+}
+
+
+object soltero {
+	
+	method amigosRelacion() {}
+	method funciona() {}
+	method sePudrioTodo() {}
+	method hayOtrasAtracciones() {}
+	method pareja(parejaSim) {}
+	method terminar(){}	
+	method termino(){}
+	method miembros(){}	
+	method reestablecer(){}
+	method pertenece(algunSim){}
 }

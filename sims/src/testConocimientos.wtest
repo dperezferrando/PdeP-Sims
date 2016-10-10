@@ -1,5 +1,7 @@
 import Sim.*
 import Trabajo.*
+import Personalidades.*
+import EstadoDeAnimo.*
 
 
 object fixture {

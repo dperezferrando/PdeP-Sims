@@ -1,0 +1,36 @@
+import Sim.*
+import Trabajo.*
+import Personalidades.*
+import EstadoDeAnimo.*
+import FuentesDeInformacion.*
+
+object fixture {
+	var sim
+	
+	method instanciarSim()
+	{
+		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
+		sim.agregarFuente(lunaDePluton)
+		sim.agregarFuente(tinelli)
+	}
+	
+	method informarSim() {
+		sim.informarse()
+	}
+	
+	method conocimientosSim() {
+		return sim.conocimientos()
+	}
+	
+	method loContieneElSim(unConocimiento) {
+		return sim.conocimientos().contains(unConocimiento)
+	} 
+}
+
+test "Un sim se informa adquiriendo un conocimiento aleatorio de cada una de sus fuentes de informacion"
+{
+	fixture.instanciarSim()
+	fixture.informarSim()
+	assert.equals(true, lunaDePluton.informacion().any({info => fixture.loContieneElSim(info)}))
+	assert.equals(true, tinelli.informacion().any({info => fixture.loContieneElSim(info)}))
+}

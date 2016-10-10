@@ -1,6 +1,7 @@
 import Sim.*
 import Trabajo.*
-
+import Personalidades.*
+import EstadoDeAnimo.*
 
 object fixture {
 	var sim
@@ -8,7 +9,7 @@ object fixture {
 	method instanciarSimConEstadoDeAnimo(unEstadoDeAnimo)
 	{
 		sim = new Sim("hombre", 20, 2000, superficial, "mujer")
-		sim.setEstadoDeAnimo(unEstadoDeAnimo)
+		sim.ponerse(unEstadoDeAnimo)
 		sim.adquirirConocimiento("Hay que hacer el TP de PDP")
 		sim.adquirirConocimiento("Mañana tengo parcial y no estudie")
 	}
@@ -85,3 +86,4 @@ test "Un sim se puso normal y su felicidad volvio a la normalidad"
 	fixture.instanciarSimConEstadoDeAnimo(normal)
 	assert.equals(fixture.felicidadOriginal(), fixture.felicidadSim())
 }
+

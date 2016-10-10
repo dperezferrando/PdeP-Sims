@@ -1,6 +1,8 @@
 import Sim.*
 import Trabajo.*
-import Relacion.*
+import Personalidades.*
+import EstadoDeAnimo.*
+import Celos.*
 
 // Requerimiento 28
 

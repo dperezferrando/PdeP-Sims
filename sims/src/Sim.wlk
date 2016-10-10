@@ -1,5 +1,9 @@
 import Trabajo.*
-import Relacion.*
+import EnPareja.*
+import EstadoDeAnimo.*
+import Personalidades.*
+import Celos.*
+import FuentesDeInformacion.*
 
 class Sim
 {
@@ -11,10 +15,10 @@ class Sim
 	var estadoDeAnimo = normal
 	var amigos = []
 	var sexoDePreferencia
-	var relacion = "soltero"
-	var trabajo = "ninguno"
+	var estadoCivil = soltero
+	var trabajo = desempleado
 	var conocimientos = #{}
-
+	var fuentesDeInformacion = #{}
 
 	constructor(unSexo, unaEdad, unDinero, unaPersonalidad, unSexoDePreferencia) {
 		sexo = unSexo
@@ -23,7 +27,6 @@ class Sim
 		personalidad = unaPersonalidad
 		sexoDePreferencia = unSexoDePreferencia
 	}
-
 
 //GETTERS Y SETTERS
 
@@ -47,7 +50,11 @@ class Sim
 		if(self.estaSoniador()) {
 			return #{}
 		}
-		return conocimientos	
+		return conocimientos
+	}
+	
+	method setConocimientos(unosConocimientos) {
+		conocimientos = unosConocimientos
 	}
 
 	method amigos() {
@@ -69,20 +76,16 @@ class Sim
 	method trabajo() {
 		return trabajo
 	}
+	
+	method fuentesDeInformacion() {
+		return fuentesDeInformacion
+	}
 
 	method setTrabajo(unTrabajo) {
 		trabajo = unTrabajo
 	}
 
 	method nivelDeFelicidad() {
-		if(self.estaSoniador()) {
-			return nivelDeFelicidad + 1000
-		}
-
-		if(self.estaIncomodo()) {
-			return nivelDeFelicidad - 200
-		}
-
 		return nivelDeFelicidad	
 	}
 
@@ -98,15 +101,13 @@ class Sim
 		estadoDeAnimo = unEstadoDeAnimo
 	}
 
-	method relacion() {
-		return relacion
+	method estadoCivil() {
+		return estadoCivil
 	}	
 
-	method setRelacion(unaRelacion) {
-		relacion = unaRelacion
+	method setEstadoCivil(unaRelacion) {
+		estadoCivil = unaRelacion
 	}
-
-
 
 //ABRAZOS
 
@@ -119,16 +120,17 @@ class Sim
 		if(unSim.leAtrae(self)) 
 			unSim.ponerse(soniador)
 		else 
-			unSim.ponerse(incomodo)
-		
+			unSim.ponerse(incomodo)		
 	}
-
-
 
 //AMISTAD
 
-	method hacerseAmigoDe(unSim) {
+	method agregarAmigo(unSim) {
 		self.amigos().add(unSim)
+	}
+	
+	method hacerseAmigoDe(unSim) {
+		self.agregarAmigo(unSim)
 		self.modificarNivelDeFelicidad(self.valorarA(unSim))
 	}
 
@@ -165,8 +167,6 @@ class Sim
 		return not self.amigos().isEmpty()
 	}
 
-
-
 //EDAD
 
 	method esJoven() {
@@ -197,7 +197,6 @@ class Sim
 
 	method lePodriaInteresar(unSim) {
 		return unSim.sexo() == self.sexoDePreferencia()
-
 	}
 
 	method leAtrae(unSim) {
@@ -217,33 +216,29 @@ class Sim
 
 	method empezarRelacion(unSim)
 	{
-		var nuevaRelacion = new Relacion(self, unSim)
-		self.setRelacion(nuevaRelacion) 
-		unSim.setRelacion(nuevaRelacion)
+		var nuevaRelacion = new EnPareja(self, unSim)
+		self.setEstadoCivil(nuevaRelacion) 
+		unSim.setEstadoCivil(nuevaRelacion)
 	}
 	method amigosRelacion()
 	{
-		return self.relacion().amigosRelacion()
-	}
-	
-	method estaSoltero()
-	{
-		return self.relacion() == "soltero"
+		return self.estadoCivil().amigosRelacion()
 	}
 	
 	method pareja()
 	{
-		if(self.estaSoltero())
-			error.throwWithMessage("No tiene pareja")
-		return self.relacion().pareja(self)
+		return self.estadoCivil().pareja(self)
 	}
 	
 	method terminarRelacion()
 	{
-		
-		relacion.terminar()
+		self.estadoCivil().terminar()
 	}
 	
+	method estaSoltero()
+	{
+		return self.estadoCivil() == soltero
+	}
 	
 //DINERO
 
@@ -259,8 +254,32 @@ class Sim
 		return self.dinero() * 2
 	}
 	
-	method recibirPago(unaCantidad) {
+	method recibirPago() {
+		self.setDinero(self.dinero() + self.trabajo().sueldo(self))
+	}
+	
+	method modificarDinero(unaCantidad) {
 		self.setDinero(self.dinero() + unaCantidad)
+	}
+	
+	method puedePrestar(unaCantidad) {
+		return unaCantidad <= self.dinero()
+	}
+	
+	method lePrestariaA(unSim, unaCantidad) {
+		return self.lePrestaComoMuchoA(unSim) >= unaCantidad
+	}
+	
+	method prestarDineroA(unSim, unaCantidad) {
+		if(not self.puedePrestar(unaCantidad) || not self.lePrestariaA(unSim, unaCantidad)) {
+			error.throwWithMessage("El sim no puede o no quiere prestar esa cantidad")
+		}
+		self.modificarDinero(-unaCantidad)
+		unSim.modificarDinero(unaCantidad)
+	}
+	
+	method lePrestaComoMuchoA(unSim) {
+		return self.personalidad().cuantoPresta(self ,unSim)
 	}
 
 //TRABAJO
@@ -270,25 +289,17 @@ class Sim
 	}
 	
 	method tieneTrabajo() {
-		return self.trabajo() != "ninguno"
+		return self.trabajo() != desempleado
 	}
 	
-	method trabajar() {
-		
-		if(!self.tieneTrabajo())
-        	error.throwWithMessage("Tu Sim no tiene trabajo")
-        	
-		self.recibirPago(self.trabajo().sueldo(self))
+	method trabajar() {	
+		self.recibirPago()
 		self.trabajo().influirFelicidad(self)
-		
-		if(self.esBuenazo() && self.trabajaConTodosSusAmigos() && self.tieneAmigos() && self.tieneTrabajo()) {
-			self.modificarNivelDeFelicidad(self.nivelDeFelicidad() * 0.1)
-		}
+		self.personalidad().motivar(self)
 	}
 	
 	method trabajaCon(unSim) {
-		return self.trabajo() == unSim.trabajo()
-		
+		return self.trabajo() == unSim.trabajo()	
 	}
 	
 	method trabajaConTodosSusAmigos() {
@@ -296,10 +307,10 @@ class Sim
 	}
 		
 //PERSONALIDAD
+
 	method esBuenazo() {
 		return self.personalidad() == buenazo 
 	}		
-	
 	
 //CONOCIMIENTOS
 
@@ -318,6 +329,35 @@ class Sim
 	method contraerAmnesia() {
 		self.conocimientos().clear()
 	}
+	
+	method difundir(unConocimiento) {
+		self.adquirirConocimiento(unConocimiento)
+		self.amigos().forEach({unSim => unSim.adquirirConocimiento(unConocimiento)})
+	}
+	
+	method nadieLoSabe(unConocimiento) {
+		return self.amigos().all({unSim => not unSim.conoce(unConocimiento)}) 
+	}
+	
+	method esPrivado(unConocimiento) {
+		return self.conoce(unConocimiento) && self.nadieLoSabe(unConocimiento)
+	}
+	
+	method conocimientosPrivados() {
+		return self.conocimientos().filter({unConocimiento => self.esPrivado(unConocimiento)})
+	}
+	
+	method desparramarChismeSobre(unSim) {
+		self.difundir(unSim.conocimientosPrivados().anyOne())
+	}
+	
+	method darInformacion() {
+		return self.amigos().random().conocimientosPrivados().anyOne()
+	}
+	
+	method adquirirConocimientos(unosConocimientos) {
+		self.setConocimientos(self.conocimientos() + unosConocimientos)
+	}
 
 //ESTADOS DE ANIMO
 
@@ -328,10 +368,14 @@ class Sim
 	method estaIncomodo() {
 		return self.estadoDeAnimo() == incomodo
 	}
-
+	
+	method estaNormal() {
+		return self.estadoDeAnimo() == normal
+	}
+	
 	method ponerse(unEstadoDeAnimo) {
-		self.setEstadoDeAnimo(unEstadoDeAnimo)
-
+		unEstadoDeAnimo.hacerEfecto(self)
+		self.setEstadoDeAnimo(unEstadoDeAnimo)	
 	}
 
 // CELOS
@@ -340,86 +384,22 @@ class Sim
 		self.modificarNivelDeFelicidad(-10)
 		motivo.romperAmistades(self)
 	}
-	
-}
-
-//PERSONALIDADES
-
-object interesado {
-
-	method valoracion(unSim, otroSim) {
-		return 0.1 * otroSim.dineroTotalAmigos()
-	}
-
-	method atraccion(unSim, otroSim) {
-		return otroSim.dinero() >= unSim.duplicarDinero()
-	}
-}
-
-object superficial {
-
-	method valoracion(unSim, otroSim) {
-		return 20 * otroSim.nivelDePopularidad()
-	}
-
-	method atraccion(unSim, otroSim) {
-		return otroSim.esJoven() && unSim.amigos().all({sim => otroSim.esMasPopularQue(sim)})
-	}
-}
-
-object buenazo {
-
-	method valoracion(unSim, otroSim) {
-		return 0.5 * unSim.nivelDeFelicidad()
-	}
-
-	method atraccion(unSim, otroSim) {
-		return true
-	}
-	
-}
-
-object peleadoConLaVida {
-
-	method valoracion(unSim, otroSim) {
-		return 0
-	}
-
-	method atraccion(unSim, otroSim) {
-		return otroSim.estaTriste()
-	}
-}
-
-
-// MOTIVOS DE CELOS
-
-object dinero {
-	
-	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.tieneMasDineroQue(unSim)}))
 		
+// FUENTES DE INFORMACION
+
+	method agregarFuente(unaFuente) {
+		self.fuentesDeInformacion().add(unaFuente)
 	}
-}
-
-object popularidad {
-	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => simCeloso.esMasPopularQue(unSim)}))
+	
+	method obtenerInformacion(unaFuente) {
+		self.adquirirConocimiento(unaFuente.darInformacion())
 	}
-}
-
-
-object pareja {
-	method romperAmistades(simCeloso) {
-		simCeloso.setAmigos(simCeloso.amigos().filter({unSim => not simCeloso.pareja().esAmigoDe(unSim)}))
+	
+	method informarse() {
+		self.adquirirConocimientos(self.fuentesDeInformacion().map({unaFuente => self.obtenerInformacion(unaFuente)})) 
 	}
+
 }
-
-
-//TIPOS DE ESTADOS DE ANIMOS
-
-object normal {}
-object soniador {}
-object incomodo {}
 
 
 //SIMS DE PRUEBA

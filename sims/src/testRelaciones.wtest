@@ -1,5 +1,6 @@
 import Sim.*
-import Relacion.*
+import EnPareja.*
+import Personalidades.*
 
 object fixture
 {
@@ -14,7 +15,7 @@ object fixture
 	
 	method relacion()
 	{
-		return sim.relacion()
+		return sim.estadoCivil()
 	}
 	
 	method terminarRelacion()
@@ -49,7 +50,7 @@ object fixture
 test "Dos sims inician una relacion"
 {
 	fixture.instanciarSimYEmpezarRelacionCon(pepita)
-	assert.equals(fixture.relacion(), pepita.relacion())
+	assert.equals(fixture.relacion(), pepita.estadoCivil())
 }
 
 // Requerimiento 12

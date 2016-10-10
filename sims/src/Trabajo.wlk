@@ -60,3 +60,4 @@ class TrabajoMercenario inherits Trabajo {
 object mecanico inherits TrabajoCopado(10, 100) {}
 object ingeniero inherits TrabajoMercenario(0,0) {}
 object barrendero inherits TrabajoAburrido(20, 30) {}
+object desempleado inherits TrabajoCopado(0,0) {}
