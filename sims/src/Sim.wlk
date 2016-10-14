@@ -296,6 +296,7 @@ class Sim
 		self.recibirPago()
 		self.trabajo().influirFelicidad(self)
 		self.personalidad().motivar(self)
+		self.trabajo().volverALaNormalidad(self)
 	}
 	
 	method trabajaCon(unSim) {

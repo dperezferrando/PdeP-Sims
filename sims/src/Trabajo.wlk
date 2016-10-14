@@ -1,3 +1,5 @@
+import EstadoDeAnimo.normal
+
 class Trabajo { // Abstracta
 	
 	var felicidadAfectada
@@ -17,6 +19,11 @@ class Trabajo { // Abstracta
 	method felicidadAfectada()
 	{
 		return felicidadAfectada
+	}
+	
+	method volverALaNormalidad(unSim)
+	{
+		unSim.setEstadoDeAnimo(normal)	
 	}
 	
 }
@@ -41,6 +48,12 @@ class TrabajoAburrido inherits Trabajo {
 	}
 }
 
+class TrabajoAburridoHastaLaMuerte inherits TrabajoAburrido {
+	
+	constructor(unSueldo, unaFelicidad) = super(unSueldo, 10*unaFelicidad)
+	
+}
+
 class TrabajoMercenario inherits Trabajo {
 	
 	constructor(unSueldo, unaFelicidad) = super(unSueldo, unaFelicidad)
@@ -56,8 +69,48 @@ class TrabajoMercenario inherits Trabajo {
 	}
 }
 
+class TrabajoMercenarioSocial inherits TrabajoMercenario {
+	
+	constructor(unSueldo, unaFelicidad) = super(unSueldo, unaFelicidad)
+	
+	override method sueldo(unSim)
+	{
+		
+		return super(unSim)+self.comision(unSim)
+				
+	}
+	
+	method comision(unSim)
+	{
+		return unSim.amigos().size()
+	}
+}
+
 //TRABAJOS DE PRUEBA
+
+object desempleado {
+	method sueldo(unSim)
+	{
+		return 0
+	}
+	
+	method felicidadAfectada()
+	{
+		return 0
+	}
+	
+	method volverALaNormalidad(unSim)
+	{
+			
+	}
+	
+	method influirFelicidad(unSim)
+	{
+		
+	}
+}
+
 object mecanico inherits TrabajoCopado(10, 100) {}
 object ingeniero inherits TrabajoMercenario(0,0) {}
 object barrendero inherits TrabajoAburrido(20, 30) {}
-object desempleado inherits TrabajoCopado(0,0) {}
+object ingenieroIndustrial inherits TrabajoMercenarioSocial(10,20){}

@@ -11,6 +11,7 @@ object fixture {
 	method instanciarSimYMandarALaburar (trabajo)
 	{
 		sim = new Sim("hombre", 20, 100, superficial, "mujer")
+		sim.setAmigos([juan,pepe,martin])
 		sim.setTrabajo(trabajo)
 		sim.trabajar()
 	}
@@ -77,4 +78,10 @@ test "Un Sim desocupado no presenta cambio alguno en su dinero o felicidad cuand
 	assert.equals(1000, fixture.felicidadSim())
 	assert.equals(100, fixture.dineroSim())
 	
+}
+
+test "El Trabajo Mercenario Social Agrega al Sueldo la Comision"
+{
+	fixture.instanciarSimYMandarALaburar(ingenieroIndustrial)
+	assert.equals(100 + (0.02*fixture.dineroSim())+3,fixture.sueldoTrabajo())
 }
