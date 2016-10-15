@@ -387,9 +387,9 @@ class Sim
 		motivo.ataqueDeCelos(self)
 	}
 	
-	method filtrarAmigos(unSim,bloque)
+	method filtrarAmigos(bloque)
 	{
-		unSim.setAmigos(unSim.amigos().filter(bloque))
+		self.setAmigos(self.amigos().filter(bloque))
 	}
 		
 // FUENTES DE INFORMACION

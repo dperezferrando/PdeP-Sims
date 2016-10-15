@@ -44,7 +44,7 @@ object fixture {
 test "Un Sim se pone celoso por dinero dejando de ser amigo de pepita y martin ya que tienen mas dinero que el y disminuye su felicidad en 10"
 {
 
-	fixture.instanciarSimYPonerloCelosoPor(dinero)
+	fixture.instanciarSimYPonerloCelosoPor(porPlata)
 	assert.equals([pablo,pepita],  fixture.amigosSims())
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
 }
@@ -52,7 +52,7 @@ test "Un Sim se pone celoso por dinero dejando de ser amigo de pepita y martin y
 test "Un Sim se pone celoso por popularidad dejando de ser amigo de pepita ya que es mas popular y disminuye su felicidad en 10"
 {
 
-	fixture.instanciarSimYPonerloCelosoPor(popularidad)
+	fixture.instanciarSimYPonerloCelosoPor(porPopularidad)
 	assert.equals([pablo, martin],  fixture.amigosSims())
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
 } 
@@ -60,7 +60,7 @@ test "Un Sim se pone celoso por popularidad dejando de ser amigo de pepita ya qu
 test "Un Sim se pone celoso de su pareja dejando de ser amigo de pablo y martin ya que son amigos de pepita y disminuye su felicidad en 10"
 {
 
-	fixture.instanciarSimYPonerloCelosoPor(pareja)
+	fixture.instanciarSimYPonerloCelosoPor(porPareja)
 	assert.equals([pepita],  fixture.amigosSims())
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal() - 10)
 } 

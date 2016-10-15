@@ -1,6 +1,6 @@
 class Celos {
 	
-	method ataqueCelos(unSim)
+	method ataqueDeCelos(unSim)
 	{
 		unSim.modificarNivelDeFelicidad(-10)
 		self.celarAmigos(unSim)
@@ -17,7 +17,7 @@ class CelosPorPlata inherits Celos {
 	
 	override method celarAmigos(unSim)
 	{
-		unSim.filtrarAmigos(unSim,{otroSim => unSim.tieneMasDineroQue(otroSim)})
+		unSim.filtrarAmigos({otroSim => unSim.tieneMasDineroQue(otroSim)})
 	}
 	
 }
@@ -26,7 +26,7 @@ class CelosPorPopularidad inherits Celos {
 	
 	override method celarAmigos(unSim)
 	{
-		unSim.filtrarAmigos(unSim,{otroSim => unSim.esMasPopularQue(otroSim)})
+		unSim.filtrarAmigos({otroSim => unSim.esMasPopularQue(otroSim)})
 	}
 	
 }
@@ -35,7 +35,7 @@ class CelosPorPareja inherits Celos {
 	
 	override method celarAmigos(unSim)
 	{
-		unSim.filtrarAmigos(unSim,{otroSim => not unSim.pareja().esAmigoDe(otroSim)})
+		unSim.filtrarAmigos({otroSim => !unSim.pareja().esAmigoDe(otroSim)})
 	}
 	
 }
