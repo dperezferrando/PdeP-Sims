@@ -382,8 +382,14 @@ class Sim
 // CELOS
 
 	method ponerseCelosoPor(motivo) {
-		self.modificarNivelDeFelicidad(-10)
-		motivo.romperAmistades(self)
+//		self.modificarNivelDeFelicidad(-10)
+//		motivo.romperAmistades(self)
+		motivo.ataqueDeCelos(self)
+	}
+	
+	method filtrarAmigos(unSim,bloque)
+	{
+		unSim.setAmigos(unSim.amigos().filter(bloque))
 	}
 		
 // FUENTES DE INFORMACION
