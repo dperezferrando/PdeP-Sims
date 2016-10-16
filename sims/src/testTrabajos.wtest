@@ -72,11 +72,11 @@ test "Un Sim con trabajo mercenario gana 100 + 2% de su dinero y su felicidad qu
 	assert.equals(fixture.felicidadSim(), fixture.felicidadOriginal())
 }
 
-test "Un Sim desocupado no presenta cambio alguno en su dinero o felicidad cuando va a trabajar"
+test "Un Sim desocupado tira excepcion al mandar a laburar"
 {
-	fixture.instanciarSimYMandarALaburar(desempleado)
-	assert.equals(1000, fixture.felicidadSim())
-	assert.equals(100, fixture.dineroSim())
+	
+	assert.throwsException({=> fixture.instanciarSimYMandarALaburar(desempleado)})
+
 	
 }
 
