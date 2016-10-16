@@ -67,17 +67,36 @@ class EnPareja
 	}
 }
 
-
 object soltero {
 	
-	method amigosRelacion() {}
-	method funciona() {}
-	method sePudrioTodo() {}
-	method hayOtrasAtracciones() {}
-	method pareja(parejaSim) {}
-	method terminar(){}	
-	method termino(){}
-	method miembros(){}	
-	method reestablecer(){}
-	method pertenece(algunSim){}
+	method amigosRelacion() {
+		error.throwWithMessage("Un sim soltero no tiene un circulo de amigos de la relacion.")
+	}
+	method funciona() {
+		error.throwWithMessage("No se puede saber si funciona la relacion de un sim soltero.")
+	}
+	method sePudrioTodo() {
+		error.throwWithMessage("No se puede saber si se pudrio todo en la relacion de un sim soltero.")
+	}
+	method hayOtrasAtracciones() {
+		error.throwWithMessage("Un sim soltero no tiene otras atracciones.")
+	}
+	method pareja(parejaSim) {
+		error.throwWithMessage("Un sim soltero no tiene pareja.")
+	}
+	method terminar(){
+		error.throwWithMessage("Un sim soltero no puede terminar su relacion.")
+	}	
+	method termino(){
+		error.throwWithMessage("No se puede saber si termino la relacion de un sim soltero.")
+	}
+	method miembros(){
+		error.throwWithMessage("No hay miembros de la relacion si el sim es soltero.")
+	}
+	method reestablecer(){
+		error.throwWithMessage("No se puede restablecer la relacion si el sim es soltero.")
+	}
+	method pertenece(algunSim){
+		error.throwWithMessage("No se puede saber si pertenece de un sim soltero.")
+	}
 }

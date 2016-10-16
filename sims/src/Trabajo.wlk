@@ -91,22 +91,22 @@ class TrabajoMercenarioSocial inherits TrabajoMercenario {
 object desempleado {
 	method sueldo(unSim)
 	{
-		return 0
+		error.throwWithMessage("Si el sim es desempleado, no tiene sueldo.")
 	}
 	
 	method felicidadAfectada()
 	{
-		return 0
+		error.throwWithMessage("No se puede modificar la felicidad de un sim desempleado.")
 	}
 	
 	method volverALaNormalidad(unSim)
 	{
-			
+		error.throwWithMessage("No se puede cambiar el estado de un sim desempleado.")
 	}
 	
 	method influirFelicidad(unSim)
 	{
-		
+		error.throwWithMessage("No se puede modificar la felicidad de un sim desempleado.")
 	}
 }
 
