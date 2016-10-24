@@ -33,7 +33,11 @@ class Sim
 	method edad() {
 		return edad
 	}
-
+	
+	method setEdad(unNumero)
+	{
+		edad = unNumero
+	}
 	method sexo() {
 		return sexo
 	}
@@ -216,9 +220,17 @@ class Sim
 
 	method empezarRelacion(unSim)
 	{
+		if(!self.estaSoltero())
+			error.throwWithMessage("El sim ya tiene una pareja")
+		if(self.esMuyJoven() || unSim.esMuyJoven())
+			error.throwWithMessage("Uno de los dos sims es muy chico para tener una relacion")
 		var nuevaRelacion = new EnPareja(self, unSim)
 		self.setEstadoCivil(nuevaRelacion) 
 		unSim.setEstadoCivil(nuevaRelacion)
+	}
+	method esMuyJoven()
+	{
+		return self.edad() <= 16
 	}
 	method amigosRelacion()
 	{
@@ -404,6 +416,11 @@ class Sim
 	
 	method informarse() {
 		self.adquirirConocimientos(self.fuentesDeInformacion().map({unaFuente => self.obtenerInformacion(unaFuente)})) 
+	}
+	
+	method cumplirAnios()
+	{
+		self.setEdad(self.edad()+1)
 	}
 
 }

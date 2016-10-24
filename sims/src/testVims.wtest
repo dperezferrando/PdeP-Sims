@@ -1,0 +1,29 @@
+import Sim.*
+import Vim.*
+import Personalidades.*
+import EstadoDeAnimo.*
+
+// Requerimiento 11 
+test "Un sim cumple años"
+{
+	var sim = new Sim("hombre", 20, 50000, superficial, "mujer")
+	var edad = sim.edad()
+	sim.cumplirAnios()
+	assert.equals(edad+1, sim.edad())
+}
+
+test "Un vim no cumple años"
+{
+	var vim = new Vim("hombre", 20, 50000, superficial, "mujer")
+	var edad = vim.edad()
+	vim.cumplirAnios()
+	assert.equals(edad, vim.edad())
+}
+
+// Requerimiento 12
+
+/* Podria crearse una composicion con un objeto infeccion delegando
+ * en este el comportamiento relacionado con la edad y  con morder
+ * a un sim y elimiando la herencia
+ * 
+ */

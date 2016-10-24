@@ -13,6 +13,7 @@ object fixture {
 		sim = new Sim("hombre", 20, 100, superficial, "mujer")
 		sim.setAmigos([juan,pepe,martin])
 		sim.setTrabajo(trabajo)
+		sim.setEstadoDeAnimo(soniador)
 		sim.trabajar()
 	}
 	
@@ -46,7 +47,11 @@ object fixture {
 	{
 		return sim.trabajo().felicidadAfectada()
 	}
-	
+
+	method estadoDeAnimo()
+	{
+		return sim.estadoDeAnimo()
+	}
 }
 
 
@@ -84,4 +89,18 @@ test "El Trabajo Mercenario Social Agrega al Sueldo la Comision"
 {
 	fixture.instanciarSimYMandarALaburar(ingenieroIndustrial)
 	assert.equals(100 + (0.02*fixture.dineroSim())+3,fixture.sueldoTrabajo())
+}
+
+test "Sim vuelve a normal al laburar"
+{
+	fixture.instanciarSimYMandarALaburar(ingenieroIndustrial)
+	assert.equals(fixture.estadoDeAnimo(), normal)
+	
+}
+
+test "Sim desocupado no vuelve a normal al laburar"
+{
+	
+	assert.throwsException({=> fixture.instanciarSimYMandarALaburar(desempleado)})
+	assert.equals(fixture.estadoDeAnimo(), soniador)
 }

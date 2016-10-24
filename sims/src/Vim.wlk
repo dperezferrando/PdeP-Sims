@@ -9,4 +9,7 @@ class Vim inherits Sim {
 		return 18
 	}
 	
+	override method cumplirAnios() { }
+	
 }
+

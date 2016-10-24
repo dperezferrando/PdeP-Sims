@@ -6,9 +6,9 @@ object fixture
 {
 	var sim
 	
-	method instanciarSimYEmpezarRelacionCon(otroSim)
+	method instanciarSimYEmpezarRelacionCon(edad, otroSim)
 	{
-		sim = new Sim("hombre", 20, 3000, superficial, "mujer")
+		sim = new Sim("hombre", edad, 3000, superficial, "mujer")
 		sim.hacerseAmigoDe(icardi)
 		sim.empezarRelacion(otroSim)
 	}
@@ -42,6 +42,11 @@ object fixture
 	{
 		sim.hacerseAmigoDe(alguien)
 	}
+	
+	method simEmpezarRelacionCon(alguien)
+	{
+		sim.empezarRelacion(alguien)
+	}
 
 }
 
@@ -49,7 +54,7 @@ object fixture
 
 test "Dos sims inician una relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	assert.equals(fixture.relacion(), pepita.estadoCivil())
 }
 
@@ -57,7 +62,7 @@ test "Dos sims inician una relacion"
 
 test "Sim forma parte de una relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	assert.that(fixture.relacion().pertenece(pepita))
 }
 
@@ -65,7 +70,7 @@ test "Sim forma parte de una relacion"
 
 test "Terminar relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	fixture.terminarRelacion()
 	assert.that(fixture.simSoltero())
 	assert.that(pepita.estaSoltero())
@@ -75,7 +80,7 @@ test "Terminar relacion"
 
 test "Saber si una relacion termino"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	var relacion = fixture.relacion()
 	fixture.terminarRelacion()
 	assert.that(relacion.termino())
@@ -85,7 +90,7 @@ test "Saber si una relacion termino"
 
 test "Conocer circulo de amigos de la relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	assert.equals(fixture.relacion().amigosRelacion(), fixture.unionAmigos())
 }
 
@@ -93,7 +98,7 @@ test "Conocer circulo de amigos de la relacion"
 
 test "Conocer miembros de la relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	assert.equals([fixture.sim(), pepita], fixture.relacion().miembros())
 }
 
@@ -101,7 +106,7 @@ test "Conocer miembros de la relacion"
 
 test "Saber si relacion funciona"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(carla)
+	fixture.instanciarSimYEmpezarRelacionCon(20, carla)
 	assert.that(fixture.relacion().funciona())
 }
 
@@ -110,7 +115,7 @@ test "Saber si relacion funciona"
 test "Saber si en relacion se pudrio todo"
 {
 	icardi.setNivelDeFelicidad(10)
-	fixture.instanciarSimYEmpezarRelacionCon(wanda)
+	fixture.instanciarSimYEmpezarRelacionCon(20, wanda)
 	wanda.hacerseAmigoDe(pepe)
 	assert.that(fixture.relacion().sePudrioTodo())
 }
@@ -119,7 +124,7 @@ test "Saber si en relacion se pudrio todo"
 
 test "Reestablecer relacion"
 {
-	fixture.instanciarSimYEmpezarRelacionCon(pepita)
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
 	var relacion = fixture.relacion()
 	fixture.terminarRelacion()
 	fixture.sim().empezarRelacion(anastasia)
@@ -130,3 +135,22 @@ test "Reestablecer relacion"
 	
 }
 
+// Segunda Entrega
+
+test "Un Sim no puede empezar una relacion si ya tiene una"
+{
+	fixture.instanciarSimYEmpezarRelacionCon(20, pepita)
+	assert.throwsException({=> fixture.simEmpezarRelacionCon(wanda)})
+	
+}
+
+test "Un sim no puede empezar relacion si es joven"
+{	
+	assert.throwsException({=>fixture.instanciarSimYEmpezarRelacionCon(16, pepita)})
+}
+
+test "Un sim no puede empezar relacion con sim joven"
+{
+	var lisa = new Sim("mujer", 8, 30, superficial, "hombre")
+	assert.throwsException({=> fixture.instanciarSimYEmpezarRelacionCon(20, lisa)})
+}
